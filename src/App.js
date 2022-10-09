@@ -5,7 +5,7 @@ import GlobalStyles from "./GlobalStyles"
 
 import Filmes from "./Filmes"
 import Seçoes from "./Seções"
-import Assentos from "./Assentos"
+import SelecionarAssentos from "./SelecionarAssentos"
 import Tela_Sucesso from "./Tela_Sucesso"
 
 export default function App() {
@@ -17,7 +17,7 @@ export default function App() {
             <Routes>
                 <Route path="/" element={<Filmes />}/>
                 <Route path="/sessoes/:idFilme" element={<Seçoes />}/>
-                <Route path="/assentos/:idSessao" element={<Assentos />}/>
+                <Route path="/assentos/:idSessao" element={<SelecionarAssentos />}/>
                 <Route path="/sucesso" element={<Tela_Sucesso />}/>
             </Routes>
         </BrowserRouter>
