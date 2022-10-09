@@ -3,6 +3,9 @@ import styled from "styled-components";
 import AssentosDisponiveis from "./AssentosDisponíveis";
 
 export default function SelecionarAssentos() {
+    const { idSessao } = useParams();
+    const urlAssentos = `https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`
+
   return (
     <>
       <Titulo>Selecione o(s) assento(s)</Titulo>

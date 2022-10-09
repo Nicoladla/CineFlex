@@ -4,13 +4,12 @@ import axios from "axios";
 import styled from "styled-components";
 
 export default function Filmes() {
-  const url = "https://mock-api.driven.com.br/api/v5/cineflex/movies";
+  const urlFilmes = "https://mock-api.driven.com.br/api/v5/cineflex/movies";
 
   const [filmes, setFilmes] = useState([]);
-  console.log(filmes);
 
   useEffect(() => {
-    const promessa = axios.get(url);
+    const promessa = axios.get(urlFilmes);
 
     promessa.then((res) => setFilmes(res.data));
     promessa.catch((erro) => console.log(erro.response.data));
@@ -21,9 +20,11 @@ export default function Filmes() {
       <Titulo>Selecione o filme</Titulo>
       <OpcoesDeFilmes>
         {filmes.map((filme) => (
-          <li key={filme.id}>
-            <img src={filme.posterURL} alt="filme" />
-          </li>
+          <Link to={`/sessoes/${filme.id}`} key={filme.id}>
+            <li>
+              <img src={filme.posterURL} alt="filme" />
+            </li>
+          </Link>
         ))}
       </OpcoesDeFilmes>
     </>
