@@ -1,81 +1,85 @@
-import styled from "styled-components"
+import styled from "styled-components";
 
 export default function AssentosDisponiveis() {
-    const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+  const arr = [
+    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
+  ];
 
-    return (
-        <section>
-            <OpcaoDeAssento>
-                {arr.map((n) => <Assento>{n}</Assento>)}
-            </OpcaoDeAssento>
+  return (
+    <section>
+      <OpcaoDeAssento>
+        {arr.map((n) => (
+          <Assento>{n}</Assento>
+        ))}
+      </OpcaoDeAssento>
 
-            <StatusPossiveis>
-                <div >
-                    <StatusCor corFundo="#1AAE9E" corBorda="#0E7D71"></StatusCor>
-                    <p>Selecionado</p>
-                </div>
-                <div >
-                    <StatusCor corFundo="#C3CFD9" corBorda="#7B8B99"></StatusCor>
-                    <p>Disponível</p>
-                </div>
-                <div >
-                    <StatusCor corFundo="#FBE192" corBorda="#F7C52B"></StatusCor>
-                    <p>Indisponível</p>
-                </div>
-            </StatusPossiveis>
-        </section>
-    )
+      <StatusPossiveis>
+        <div>
+          <StatusCor corFundo="#1AAE9E" corBorda="#0E7D71"></StatusCor>
+          <p>Selecionado</p>
+        </div>
+        <div>
+          <StatusCor corFundo="#C3CFD9" corBorda="#7B8B99"></StatusCor>
+          <p>Disponível</p>
+        </div>
+        <div>
+          <StatusCor corFundo="#FBE192" corBorda="#F7C52B"></StatusCor>
+          <p>Indisponível</p>
+        </div>
+      </StatusPossiveis>
+    </section>
+  );
 }
 
 const OpcaoDeAssento = styled.ul`
-    background-color: antiquewhite;
-    width: 90%;
-    margin: 0 auto;
-    padding-left: 7px;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-`
+  background-color: antiquewhite;
+  width: 90%;
+  margin: 0 auto;
+  padding-left: 7px;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+`;
 
-const Assento= styled.li`
-    background-color: #C3CFD9;
-    color: #000000;
-    width: 26px;
-    height: 26px;
-    margin: 0 7px 18px 0;
-    font-size: 11px;
-    font-weight: 400;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #7B8B99;
-    border-radius: 100%;
-`
+const Assento = styled.li`
+  background-color: #c3cfd9;
+  color: #000000;
+  width: 26px;
+  height: 26px;
+  margin: 0 7px 18px 0;
+  font-size: 11px;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #7b8b99;
+  border-radius: 100%;
+`;
 
 const StatusPossiveis = styled.aside`
-    margin: 16px 0 45px ;
+  margin: 16px 0 45px;
+  display: flex;
+  justify-content: space-evenly;
+
+  & > div {
     display: flex;
-    justify-content: space-evenly;
+    flex-direction: column;
+    align-items: center;
+  }
 
-    & > div {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-    }
-
-    p{
-        color: #4E5A65;
-        margin-top: 10px;
-        font-weight: 400;
-        font-size: 13px;
-        line-height: 15px;
-    }
-`
+  p {
+    color: #4e5a65;
+    margin-top: 10px;
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 15px;
+  }
+`;
 
 const StatusCor = styled.div`
-    background-color: ${(props) => props.corFundo};
-    width: 25px;
-    height: 25px;
-    border: 1px solid ${(props) => props.corBorda};
-    border-radius: 100%;
-`
+  background-color: ${(props) => props.corFundo};
+  width: 25px;
+  height: 25px;
+  border: 1px solid ${(props) => props.corBorda};
+  border-radius: 100%;
+`;
