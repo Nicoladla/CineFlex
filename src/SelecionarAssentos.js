@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import AssentosDisponiveis from "./AssentosDisponíveis";
@@ -7,11 +7,13 @@ import AssentosDisponiveis from "./AssentosDisponíveis";
 export default function SelecionarAssentos() {
   const { idSessao } = useParams();
   const urlAssentos = `https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`;
+  const navegaçao = useNavigate();
 
   const [assentos, setAssentos] = useState(null);
-  const [assentosEscolhidos, setAssentosEscolhidos] = useState([]);
-  console.log(assentos);
-  console.log(assentosEscolhidos);
+  const [idAssentosEscolhidos, setIdAssentosEscolhidos] = useState([]);
+
+  const [nome, setNome] = useState("");
+  const [cpf, setCpf] = useState("");
 
   useEffect(() => {
     const promessa = axios.get(urlAssentos);
@@ -19,6 +21,24 @@ export default function SelecionarAssentos() {
     promessa.then((res) => setAssentos(res.data));
     promessa.catch((erro) => console.log(erro.response.data));
   }, []);
+
+  function ReservarAssentos(event) {
+    event.preventDefault();
+
+    const urlPost =
+      "https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many";
+
+    const descriçãoDaReserva = {
+      ids: idAssentosEscolhidos,
+      name: nome,
+      cpf: cpf,
+    };
+
+    const promessa = axios.post(urlPost, descriçãoDaReserva);
+
+    promessa.then((res) => navegaçao("/sucesso"));
+    promessa.catch((erro) => console.log(erro.response.data));
+  }
 
   if (assentos === null) {
     return <div>Carregando</div>;
@@ -30,16 +50,30 @@ export default function SelecionarAssentos() {
 
       <AssentosDisponiveis
         assentos={assentos.seats}
-        assentosEscolhidos={assentosEscolhidos}
-        setAssentosEscolhidos={setAssentosEscolhidos}
+        idAssentosEscolhidos={idAssentosEscolhidos}
+        setIdAssentosEscolhidos={setIdAssentosEscolhidos}
       />
 
-      <Form>
+      <Form onSubmit={ReservarAssentos}>
         <label htmlFor="nome">Nome do comprador:</label>
-        <input id="nome" type="text" placeholder="Digite seu nome..." />
+        <input
+          id="nome"
+          type="text"
+          placeholder="Digite seu nome..."
+          onChange={(e) => setNome(e.target.value)}
+          value={nome}
+          required
+        />
 
         <label htmlFor="cpf">CPF do comprador:</label>
-        <input id="cpf" type="number" placeholder="Digite seu CPF..." />
+        <input
+          id="cpf"
+          type="number"
+          placeholder="Digite seu CPF..."
+          onChange={(e) => setCpf(e.target.value)}
+          value={cpf}
+          required
+        />
 
         <EscolherAcento>
           <button type="submit">Reservar assento(s)</button>

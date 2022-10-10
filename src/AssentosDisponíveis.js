@@ -2,20 +2,20 @@ import styled from "styled-components";
 
 export default function AssentosDisponiveis({
   assentos,
-  assentosEscolhidos,
-  setAssentosEscolhidos,
+  idAssentosEscolhidos,
+  setIdAssentosEscolhidos,
 }) {
-  function SelecionarAssento(nomeDoAssento) {
-    const assentoEstaSelecionado = assentosEscolhidos.includes(nomeDoAssento);
+  function SelecionarAssento(idDoAssento) {
+    const assentoEstaSelecionado = idAssentosEscolhidos.includes(idDoAssento);
     let novaArray;
 
     if (assentoEstaSelecionado) {
-      novaArray = assentosEscolhidos.filter((a) => a !== nomeDoAssento);
+      novaArray = idAssentosEscolhidos.filter((a) => a !== idDoAssento);
     } else {
-      novaArray = [...assentosEscolhidos, nomeDoAssento];
+      novaArray = [...idAssentosEscolhidos, idDoAssento];
     }
 
-    setAssentosEscolhidos(novaArray);
+    setIdAssentosEscolhidos(novaArray);
   }
 
   return (
@@ -24,9 +24,9 @@ export default function AssentosDisponiveis({
         {assentos.map((a) => (
           <li key={a.id}>
             <Assento
-              onClick={() => SelecionarAssento(a.name)}
+              onClick={() => SelecionarAssento(a.id)}
               estaDisponivel={a.isAvailable}
-              foiSelecionado={assentosEscolhidos.includes(a.name)}
+              foiSelecionado={idAssentosEscolhidos.includes(a.id)}
               disabled={!a.isAvailable}
             >
               {a.name}
@@ -64,7 +64,7 @@ const OpcaoDeAssento = styled.ul`
 
 const Assento = styled.button`
   background-color: ${({ estaDisponivel, foiSelecionado }) =>
-    !estaDisponivel ? "#FBE192" : foiSelecionado ? '#1AAE9E' : "#c3cfd9"};
+    !estaDisponivel ? "#FBE192" : foiSelecionado ? "#1AAE9E" : "#c3cfd9"};
   color: #000000;
   width: 26px;
   height: 26px;
