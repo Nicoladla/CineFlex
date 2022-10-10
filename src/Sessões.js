@@ -4,11 +4,10 @@ import axios from "axios";
 import styled from "styled-components";
 
 export default function Sessoes() {
-  const { idSessao } = useParams();
+  const { idFilme } = useParams();
   const urlSessoes = `https://mock-api.driven.com.br/api/v5/cineflex/movies/${idFilme}/showtimes`;
 
   const [seçoes, setSeçoes] = useState(null);
-  console.log(seçoes);
 
   useEffect(() => {
     const promessa = axios.get(urlSessoes);

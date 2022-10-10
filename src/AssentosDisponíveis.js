@@ -1,15 +1,37 @@
 import styled from "styled-components";
 
-export default function AssentosDisponiveis() {
-  const arr = [
-    1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20,
-  ];
+export default function AssentosDisponiveis({
+  assentos,
+  assentosEscolhidos,
+  setAssentosEscolhidos,
+}) {
+  function SelecionarAssento(nomeDoAssento) {
+    const assentoEstaSelecionado = assentosEscolhidos.includes(nomeDoAssento);
+    let novaArray;
+
+    if (assentoEstaSelecionado) {
+      novaArray = assentosEscolhidos.filter((a) => a !== nomeDoAssento);
+    } else {
+      novaArray = [...assentosEscolhidos, nomeDoAssento];
+    }
+
+    setAssentosEscolhidos(novaArray);
+  }
 
   return (
     <section>
       <OpcaoDeAssento>
-        {arr.map((n) => (
-          <Assento>{n}</Assento>
+        {assentos.map((a) => (
+          <li key={a.id}>
+            <Assento
+              onClick={() => SelecionarAssento(a.name)}
+              estaDisponivel={a.isAvailable}
+              foiSelecionado={assentosEscolhidos.includes(a.name)}
+              disabled={!a.isAvailable}
+            >
+              {a.name}
+            </Assento>
+          </li>
         ))}
       </OpcaoDeAssento>
 
@@ -32,7 +54,6 @@ export default function AssentosDisponiveis() {
 }
 
 const OpcaoDeAssento = styled.ul`
-  background-color: antiquewhite;
   width: 90%;
   margin: 0 auto;
   padding-left: 7px;
@@ -41,8 +62,9 @@ const OpcaoDeAssento = styled.ul`
   flex-wrap: wrap;
 `;
 
-const Assento = styled.li`
-  background-color: #c3cfd9;
+const Assento = styled.button`
+  background-color: ${({ estaDisponivel, foiSelecionado }) =>
+    !estaDisponivel ? "#FBE192" : foiSelecionado ? '#1AAE9E' : "#c3cfd9"};
   color: #000000;
   width: 26px;
   height: 26px;
@@ -52,7 +74,9 @@ const Assento = styled.li`
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #7b8b99;
+  border: 1px solid
+    ${({ estaDisponivel, foiSelecionado }) =>
+      !estaDisponivel ? "#F7C52B" : foiSelecionado ? "#0E7D71" : "#7b8b99"};
   border-radius: 100%;
 `;
 

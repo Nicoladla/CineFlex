@@ -1,16 +1,38 @@
+import { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import styled from "styled-components";
-
+import axios from "axios";
 import AssentosDisponiveis from "./AssentosDisponíveis";
 
 export default function SelecionarAssentos() {
-    const { idSessao } = useParams();
-    const urlAssentos = `https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`
+  const { idSessao } = useParams();
+  const urlAssentos = `https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`;
+
+  const [assentos, setAssentos] = useState(null);
+  const [assentosEscolhidos, setAssentosEscolhidos] = useState([]);
+  console.log(assentos);
+  console.log(assentosEscolhidos);
+
+  useEffect(() => {
+    const promessa = axios.get(urlAssentos);
+
+    promessa.then((res) => setAssentos(res.data));
+    promessa.catch((erro) => console.log(erro.response.data));
+  }, []);
+
+  if (assentos === null) {
+    return <div>Carregando</div>;
+  }
 
   return (
     <>
       <Titulo>Selecione o(s) assento(s)</Titulo>
 
-      <AssentosDisponiveis />
+      <AssentosDisponiveis
+        assentos={assentos.seats}
+        assentosEscolhidos={assentosEscolhidos}
+        setAssentosEscolhidos={setAssentosEscolhidos}
+      />
 
       <Form>
         <label htmlFor="nome">Nome do comprador:</label>
@@ -25,12 +47,9 @@ export default function SelecionarAssentos() {
       </Form>
 
       <FilmeSelecionado>
-        <img
-          src="https://3.bp.blogspot.com/-Xk26CEGNSr8/UsbcAl8KM5I/AAAAAAAAPuU/un80T1-R3ns/s1600/O_hobbit.jpg"
-          alt="filme"
-        />
+        <img src={assentos.movie.posterURL} alt="filme" />
         <p>
-          Hobbit <br /> Quinta-feira - 15:00
+          {assentos.movie.title} <br /> {assentos.day.weekday} - {assentos.name}
         </p>
       </FilmeSelecionado>
     </>
