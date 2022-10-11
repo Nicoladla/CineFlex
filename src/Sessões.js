@@ -26,21 +26,29 @@ export default function Sessoes() {
 
       {seçoes.days.map((dia) => (
         <Sessao key={dia.id}>
-          <h2>
+          <h2 data-identifier="session-date">
             {dia.weekday} - {dia.date}
           </h2>
           <Link to={`/assentos/${dia.showtimes[0].id}`}>
-            <button>{dia.showtimes[0].name}</button>
+            <button data-identifier="hour-minute-btn">
+              {dia.showtimes[0].name}
+            </button>
           </Link>
           <Link to={`/assentos/${dia.showtimes[1].id}`}>
-            <button>{dia.showtimes[1].name}</button>
+            <button data-identifier="hour-minute-btn">
+              {dia.showtimes[1].name}
+            </button>
           </Link>
         </Sessao>
       ))}
 
       <FilmeSelecionado>
-        <img src={seçoes.posterURL} alt="filme" />
-        <p>{seçoes.title}</p>
+        <img
+          src={seçoes.posterURL}
+          alt="filme"
+          data-identifier="movie-img-preview"
+        />
+        <p data-identifier="movie-and-session-infos-preview">{seçoes.title}</p>
       </FilmeSelecionado>
     </TelaSeçoes>
   );

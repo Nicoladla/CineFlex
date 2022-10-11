@@ -4,16 +4,22 @@ import styled from "styled-components";
 import axios from "axios";
 import AssentosDisponiveis from "./AssentosDisponíveis";
 
-export default function SelecionarAssentos() {
+export default function SelecionarAssentos(props) {
+  const {
+    nome,
+    setNome,
+    cpf,
+    setCpf,
+    setnumeroAssentoEscolhido,
+    numeroAssentoEscolhido,
+  } = props;
+
   const { idSessao } = useParams();
   const urlAssentos = `https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`;
   const navegaçao = useNavigate();
 
   const [assentos, setAssentos] = useState(null);
   const [idAssentosEscolhidos, setIdAssentosEscolhidos] = useState([]);
-
-  const [nome, setNome] = useState("");
-  const [cpf, setCpf] = useState("");
 
   useEffect(() => {
     const promessa = axios.get(urlAssentos);
@@ -24,6 +30,12 @@ export default function SelecionarAssentos() {
 
   function ReservarAssentos(event) {
     event.preventDefault();
+
+    const temAssentoSelecionado = idAssentosEscolhidos.length === 0;
+
+    if (temAssentoSelecionado) {
+      return alert("Você precisa escolher um assento!");
+    }
 
     const urlPost =
       "https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many";
@@ -52,6 +64,8 @@ export default function SelecionarAssentos() {
         assentos={assentos.seats}
         idAssentosEscolhidos={idAssentosEscolhidos}
         setIdAssentosEscolhidos={setIdAssentosEscolhidos}
+        setnumeroAssentoEscolhido={setnumeroAssentoEscolhido}
+        numeroAssentoEscolhido={numeroAssentoEscolhido}
       />
 
       <Form onSubmit={ReservarAssentos}>
@@ -63,6 +77,7 @@ export default function SelecionarAssentos() {
           onChange={(e) => setNome(e.target.value)}
           value={nome}
           required
+          data-identifier="buyer-name-input"
         />
 
         <label htmlFor="cpf">CPF do comprador:</label>
@@ -73,16 +88,19 @@ export default function SelecionarAssentos() {
           onChange={(e) => setCpf(e.target.value)}
           value={cpf}
           required
+          data-identifier="buyer-cpf-input"
         />
 
         <EscolherAcento>
-          <button type="submit">Reservar assento(s)</button>
+          <button type="submit" data-identifier="reservation-btn">
+            Reservar assento(s)
+          </button>
         </EscolherAcento>
       </Form>
 
       <FilmeSelecionado>
         <img src={assentos.movie.posterURL} alt="filme" />
-        <p>
+        <p data-identifier="movie-and-session-infos-preview">
           {assentos.movie.title} <br /> {assentos.day.weekday} - {assentos.name}
         </p>
       </FilmeSelecionado>

@@ -21,7 +21,7 @@ export default function Filmes() {
       <OpcoesDeFilmes>
         {filmes.map((filme) => (
           <Link to={`/sessoes/${filme.id}`} key={filme.id}>
-            <li>
+            <li data-identifier="movie-outdoor">
               <img src={filme.posterURL} alt="filme" />
             </li>
           </Link>

@@ -4,18 +4,24 @@ export default function AssentosDisponiveis({
   assentos,
   idAssentosEscolhidos,
   setIdAssentosEscolhidos,
+  setnumeroAssentoEscolhido,
+  numeroAssentoEscolhido,
 }) {
-  function SelecionarAssento(idDoAssento) {
+  function SelecionarAssento(idDoAssento, nomeDoAssento) {
     const assentoEstaSelecionado = idAssentosEscolhidos.includes(idDoAssento);
-    let novaArray;
+    let novaArrayId;
+    let novaArrayNome;
 
     if (assentoEstaSelecionado) {
-      novaArray = idAssentosEscolhidos.filter((a) => a !== idDoAssento);
+      novaArrayId = idAssentosEscolhidos.filter((a) => a !== idDoAssento);
+      novaArrayNome = numeroAssentoEscolhido.filter((a) => a !== nomeDoAssento);
     } else {
-      novaArray = [...idAssentosEscolhidos, idDoAssento];
+      novaArrayId = [...idAssentosEscolhidos, idDoAssento];
+      novaArrayNome = [...numeroAssentoEscolhido, nomeDoAssento];
     }
 
-    setIdAssentosEscolhidos(novaArray);
+    setIdAssentosEscolhidos(novaArrayId);
+    setnumeroAssentoEscolhido(novaArrayNome);
   }
 
   return (
@@ -24,10 +30,11 @@ export default function AssentosDisponiveis({
         {assentos.map((a) => (
           <li key={a.id}>
             <Assento
-              onClick={() => SelecionarAssento(a.id)}
+              onClick={() => SelecionarAssento(a.id, a.name)}
               estaDisponivel={a.isAvailable}
               foiSelecionado={idAssentosEscolhidos.includes(a.id)}
               disabled={!a.isAvailable}
+              data-identifier="seat"
             >
               {a.name}
             </Assento>
@@ -36,15 +43,15 @@ export default function AssentosDisponiveis({
       </OpcaoDeAssento>
 
       <StatusPossiveis>
-        <div>
+        <div data-identifier="seat-selected-subtitle">
           <StatusCor corFundo="#1AAE9E" corBorda="#0E7D71"></StatusCor>
           <p>Selecionado</p>
         </div>
-        <div>
+        <div data-identifier="seat-available-subtitle">
           <StatusCor corFundo="#C3CFD9" corBorda="#7B8B99"></StatusCor>
           <p>Disponível</p>
         </div>
-        <div>
+        <div data-identifier="seat-unavailable-subtitle">
           <StatusCor corFundo="#FBE192" corBorda="#F7C52B"></StatusCor>
           <p>Indisponível</p>
         </div>
