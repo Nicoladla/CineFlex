@@ -5,12 +5,10 @@ import styled from "styled-components";
 
 import Carregando from "./CarregarPagina";
 
-export default function Filmes({setPodeMostrarBotaoVoltar}) {
+export default function Filmes() {
   const urlFilmes = "https://mock-api.driven.com.br/api/v5/cineflex/movies";
 
   const [filmes, setFilmes] = useState(null);
-
-  setPodeMostrarBotaoVoltar(false)
 
   useEffect(() => {
     const promessa = axios.get(urlFilmes);

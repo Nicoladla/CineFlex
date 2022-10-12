@@ -5,14 +5,11 @@ import axios from "axios";
 import Carregando from "./CarregarPagina";
 
 export default function Tela_Sucesso(props) {
-  const { nome, cpf, numeroAssentoEscolhido, setPodeMostrarBotaoVoltar } =
-    props;
+  const { nome, cpf, numeroAssentoEscolhido } = props;
   const { resultado } = useParams();
   const navegaçao = useNavigate();
 
   const [infosDaReserva, setInfosDaReserva] = useState(null);
-
-  setPodeMostrarBotaoVoltar(false);
 
   useEffect(() => {
     const promessa = axios.get(

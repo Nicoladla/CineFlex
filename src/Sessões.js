@@ -2,16 +2,15 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
+import seta from "./img/arrow-back-outline.svg";
 
 import Carregando from "./CarregarPagina";
 
-export default function Sessoes({ setPodeMostrarBotaoVoltar }) {
+export default function Sessoes() {
   const { idFilme } = useParams();
   const urlSessoes = `https://mock-api.driven.com.br/api/v5/cineflex/movies/${idFilme}/showtimes`;
 
   const [seçoes, setSeçoes] = useState(null);
-
-  setPodeMostrarBotaoVoltar(true);
 
   useEffect(() => {
     const promessa = axios.get(urlSessoes);
@@ -26,6 +25,10 @@ export default function Sessoes({ setPodeMostrarBotaoVoltar }) {
 
   return (
     <TelaSeçoes>
+      <Link to={-1}>
+        <BotaoVoltar src={seta} alt="icone" />
+      </Link>
+      
       <Titulo>Selecione o horário</Titulo>
 
       {seçoes.days.map((dia) => (
@@ -116,4 +119,14 @@ const FilmeSelecionado = styled.footer`
     font-size: 20px;
     margin-right: 14px;
   }
+`;
+
+const BotaoVoltar = styled.img`
+  width: 30px;
+  background-color: #6a8aaa;
+  color: #e8833a;
+  border-radius: 100%;
+  position: absolute;
+  top: 20px;
+  left: 15px;
 `;
