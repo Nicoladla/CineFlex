@@ -54,6 +54,6 @@ const GlobalStyles = createGlobalStyle`
         color: #293845;
         font-family: 'Roboto';
     }
-`
+`;
 
-export default GlobalStyles
+export default GlobalStyles;

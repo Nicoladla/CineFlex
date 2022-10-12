@@ -3,11 +3,15 @@ import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 
-export default function Sessoes() {
+import Carregando from "./CarregarPagina";
+
+export default function Sessoes({ setPodeMostrarBotaoVoltar }) {
   const { idFilme } = useParams();
   const urlSessoes = `https://mock-api.driven.com.br/api/v5/cineflex/movies/${idFilme}/showtimes`;
 
   const [seçoes, setSeçoes] = useState(null);
+
+  setPodeMostrarBotaoVoltar(true);
 
   useEffect(() => {
     const promessa = axios.get(urlSessoes);
@@ -17,7 +21,7 @@ export default function Sessoes() {
   }, []);
 
   if (seçoes === null) {
-    return <div>Carregando</div>;
+    return <Carregando />;
   }
 
   return (
@@ -58,7 +62,7 @@ const TelaSeçoes = styled.div`
   padding-bottom: 117px;
 `;
 
-const Titulo = styled.h1`
+const Titulo = styled.h2`
   margin: 107px 0 40px;
   text-align: center;
   font-family: "Roboto";
@@ -109,7 +113,7 @@ const FilmeSelecionado = styled.footer`
   p {
     font-family: "Roboto";
     font-weight: 400;
-    font-size: 26px;
+    font-size: 20px;
     margin-right: 14px;
   }
 `;

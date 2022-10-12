@@ -3,10 +3,14 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import styled from "styled-components";
 
-export default function Filmes() {
+import Carregando from "./CarregarPagina";
+
+export default function Filmes({setPodeMostrarBotaoVoltar}) {
   const urlFilmes = "https://mock-api.driven.com.br/api/v5/cineflex/movies";
 
-  const [filmes, setFilmes] = useState([]);
+  const [filmes, setFilmes] = useState(null);
+
+  setPodeMostrarBotaoVoltar(false)
 
   useEffect(() => {
     const promessa = axios.get(urlFilmes);
@@ -14,6 +18,10 @@ export default function Filmes() {
     promessa.then((res) => setFilmes(res.data));
     promessa.catch((erro) => console.log(erro.response.data));
   }, []);
+
+  if (filmes === null) {
+    return <Carregando />;
+  }
 
   return (
     <>
@@ -31,7 +39,7 @@ export default function Filmes() {
   );
 }
 
-const Titulo = styled.h1`
+const Titulo = styled.h2`
   margin: 107px 0 40px;
   text-align: center;
   font-family: "Roboto";

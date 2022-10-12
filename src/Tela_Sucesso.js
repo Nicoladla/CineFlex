@@ -1,13 +1,36 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
+import axios from "axios";
+import Carregando from "./CarregarPagina";
 
-export default function Tela_Sucesso({ nome, cpf, numeroAssentoEscolhido }) {
+export default function Tela_Sucesso(props) {
+  const { nome, cpf, numeroAssentoEscolhido, setPodeMostrarBotaoVoltar } =
+    props;
+  const { resultado } = useParams();
   const navegaçao = useNavigate();
 
-  function IrPraPaginaInicial() {
+  const [infosDaReserva, setInfosDaReserva] = useState(null);
+
+  setPodeMostrarBotaoVoltar(false);
+
+  useEffect(() => {
+    const promessa = axios.get(
+      `https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${resultado}/seats`
+    );
+
+    promessa.then((res) => setInfosDaReserva(res.data));
+    promessa.catch((erro) => console.log(erro.response.data));
+  }, []);
+
+  function irPraPaginaInicial() {
     navegaçao("/");
 
     window.location.reload();
+  }
+
+  if (infosDaReserva === null) {
+    return <Carregando />;
   }
 
   return (
@@ -15,13 +38,14 @@ export default function Tela_Sucesso({ nome, cpf, numeroAssentoEscolhido }) {
       <Titulo>Pedido feito com sucesso!</Titulo>
 
       <Informaçoes>
-        <h2>Filme e sessão</h2>
+        <h3>Filme e sessão</h3>
         <p data-identifier="movie-session-infos-reserve-finished">
-          Enola Holmes <br /> 24/06/2021 15:00
+          {infosDaReserva.movie.title} <br /> {infosDaReserva.day.date}{" "}
+          {infosDaReserva.name}
         </p>
       </Informaçoes>
       <Informaçoes>
-        <h2>Ingressos</h2>
+        <h3>Ingressos</h3>
         {numeroAssentoEscolhido.map((n) => (
           <p key={n} data-identifier="seat-infos-reserve-finished">
             Assento: {n}
@@ -29,14 +53,14 @@ export default function Tela_Sucesso({ nome, cpf, numeroAssentoEscolhido }) {
         ))}
       </Informaçoes>
       <Informaçoes>
-        <h2>Comprador</h2>
+        <h3>Comprador</h3>
         <p data-identifier="buyer-infos-reserve-finished">
           Nome: {nome} <br /> CPF: {cpf}
         </p>
       </Informaçoes>
 
       <VoltarProHome>
-        <button onClick={IrPraPaginaInicial} data-identifier="back-to-home-btn">
+        <button onClick={irPraPaginaInicial} data-identifier="back-to-home-btn">
           Voltar pra Home
         </button>
       </VoltarProHome>
@@ -44,7 +68,7 @@ export default function Tela_Sucesso({ nome, cpf, numeroAssentoEscolhido }) {
   );
 }
 
-const Titulo = styled.h1`
+const Titulo = styled.h2`
   color: #247a6b;
   margin: 107px 0 40px;
   text-align: center;
@@ -56,7 +80,7 @@ const Titulo = styled.h1`
 const Informaçoes = styled.section`
   margin: 0 0 25px 25px;
 
-  h2 {
+  h3 {
     font-weight: 700;
     font-size: 24px;
     margin-bottom: 10px;
@@ -79,7 +103,7 @@ const VoltarProHome = styled.div`
     height: 42px;
     border-radius: 3px;
     border: none;
-    margin: 70px 0 0;
+    margin: 70px 0 20px;
     font-size: 18px;
   }
 `;

@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
+
 import AssentosDisponiveis from "./AssentosDisponíveis";
+import Carregando from "./CarregarPagina";
 
 export default function SelecionarAssentos(props) {
   const {
@@ -18,8 +20,9 @@ export default function SelecionarAssentos(props) {
   const urlAssentos = `https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`;
   const navegaçao = useNavigate();
 
-  const [assentos, setAssentos] = useState(null);
   const [idAssentosEscolhidos, setIdAssentosEscolhidos] = useState([]);
+  const [assentos, setAssentos] = useState(null);
+  const [msgDeCampoInvalido, setMsgDeCampoInvalido] = useState("");
 
   useEffect(() => {
     const promessa = axios.get(urlAssentos);
@@ -31,10 +34,19 @@ export default function SelecionarAssentos(props) {
   function ReservarAssentos(event) {
     event.preventDefault();
 
-    const temAssentoSelecionado = idAssentosEscolhidos.length === 0;
+    const temAssentoSelecionado = idAssentosEscolhidos.length !== 0;
+    const OcpfEValido = cpf.length === 11;
 
-    if (temAssentoSelecionado) {
-      return alert("Você precisa escolher um assento!");
+    if (!OcpfEValido) {
+      return setMsgDeCampoInvalido(
+        <CPFinvalido>Digite um CPF válido.</CPFinvalido>
+      );
+    }
+
+    if (!temAssentoSelecionado) {
+      return setMsgDeCampoInvalido(
+        <SemAssento>Você precisa escolher no mínimo um assento!</SemAssento>
+      );
     }
 
     const urlPost =
@@ -48,12 +60,12 @@ export default function SelecionarAssentos(props) {
 
     const promessa = axios.post(urlPost, descriçãoDaReserva);
 
-    promessa.then((res) => navegaçao("/sucesso"));
+    promessa.then((res) => navegaçao(`/sucesso/${idSessao}`));
     promessa.catch((erro) => console.log(erro.response.data));
   }
 
   if (assentos === null) {
-    return <div>Carregando</div>;
+    return <Carregando />;
   }
 
   return (
@@ -91,6 +103,8 @@ export default function SelecionarAssentos(props) {
           data-identifier="buyer-cpf-input"
         />
 
+        <div>{msgDeCampoInvalido}</div>
+
         <EscolherAcento>
           <button type="submit" data-identifier="reservation-btn">
             Reservar assento(s)
@@ -100,15 +114,20 @@ export default function SelecionarAssentos(props) {
 
       <FilmeSelecionado>
         <img src={assentos.movie.posterURL} alt="filme" />
-        <p data-identifier="movie-and-session-infos-preview">
-          {assentos.movie.title} <br /> {assentos.day.weekday} - {assentos.name}
-        </p>
+        <div>
+          <p data-identifier="movie-and-session-infos-preview">
+            {assentos.movie.title}
+          </p>
+          <p data-identifier="movie-and-session-infos-preview">
+            {assentos.day.weekday} - {assentos.name}
+          </p>
+        </div>
       </FilmeSelecionado>
     </>
   );
 }
 
-const Titulo = styled.h1`
+const Titulo = styled.h2`
   margin: 107px 0 40px;
   text-align: center;
   font-family: "Roboto";
@@ -165,6 +184,7 @@ const FilmeSelecionado = styled.footer`
   border-top: 1px solid #9eadba;
   width: 100%;
   height: 117px;
+  padding-right: 10px;
   display: flex;
   align-items: center;
   position: fixed;
@@ -179,11 +199,32 @@ const FilmeSelecionado = styled.footer`
     border-radius: 2px;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   }
-
+  div {
+    height: 89px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+  }
   p {
     font-family: "Roboto";
     font-weight: 400;
-    font-size: 26px;
-    line-height: 30px;
+    font-size: 20px;
   }
+  p:last-child {
+    color: #7f7f7f;
+  }
+`;
+
+const CPFinvalido = styled.p`
+  color: red;
+  font-size: 15px;
+  margin-top: -10px;
+  margin-left: 5px;
+`;
+
+const SemAssento = styled.p`
+  color: gray;
+  text-align: center;
+  font-size: 15px;
+  margin: 10px 0 -15px;
 `;
