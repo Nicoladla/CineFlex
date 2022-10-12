@@ -238,7 +238,8 @@ const BotaoVoltar = styled.img`
   background-color: #6a8aaa;
   color: #e8833a;
   border-radius: 100%;
-  position: absolute;
+  position: fixed;
   top: 20px;
   left: 15px;
+  z-index: 2;
 `;

@@ -18,6 +18,7 @@ const Header = styled.header`
   position: fixed;
   top: 0;
   left: 0;
+  z-index: 1;
 
   h1 {
     color: #e8833a;
